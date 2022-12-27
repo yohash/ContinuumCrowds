@@ -1,0 +1,24 @@
+{
+  "name": "com.yohash.continuumcrowds",
+  "version": "0.1.0",
+  "displayName": "Continuum Crowds",
+  "description": "Implementation of Continuum Crowds, a real-time crowd model based on continuum dynamics.",
+  "unity": "2019.1",
+  "unityRelease": "0b5",
+  "documentationUrl": "https://grail.cs.washington.edu/projects/crowd-flows/78-treuille.pdf",
+  "changelogUrl": "https://example.com/changelog.html",
+  "licensesUrl": "https://example.com/licensing.html",
+  "dependencies": { },
+  "gitDependencies": { },
+  "keywords": [
+    "continuum",
+    "crowds",
+    "dyanamic"
+  ],
+  "author": {
+    "name": "Jason Heebl",
+    "email": "jdheebl@gmail.com",
+    "url": "https://www.heebl.com"
+  },
+  "type": "tool"
+}
