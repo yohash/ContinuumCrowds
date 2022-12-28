@@ -155,6 +155,13 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.yohash.math": {
+      "version": "https://github.com/yohash/Math.git#upm",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "0f1019356c6f745537ef3358a71cee3c51709ca5"
+    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,
