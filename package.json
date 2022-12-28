@@ -9,7 +9,9 @@
   "changelogUrl": "https://example.com/changelog.html",
   "licensesUrl": "https://example.com/licensing.html",
   "dependencies": { },
-  "gitDependencies": { },
+  "gitDependencies": {
+    "com.yohash.math": "https://github.com/yohash/Math.git#upm"
+  },
   "keywords": [
     "continuum",
     "crowds",

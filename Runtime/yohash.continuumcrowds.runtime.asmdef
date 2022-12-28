@@ -1,6 +1,9 @@
 {
 	"name": "yohash.continuumcrowds.runtime",
     "rootNamespace": "",
+    "references": [
+        "yohash.math.runtime"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

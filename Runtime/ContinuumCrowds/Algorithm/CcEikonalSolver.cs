@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
+using static System.Math;
 using Priority_Queue;
 
 
@@ -206,8 +207,8 @@ namespace Yohash.ContinuumCrowds
             }
           }
           // select out cheapest
-          float phi_mx = Math.Min(phi_m[0], phi_m[2]);
-          float phi_my = Math.Min(phi_m[1], phi_m[3]);
+          float phi_mx = Min(phi_m[0], phi_m[2]);
+          float phi_my = Min(phi_m[1], phi_m[3]);
 
           // now assign C_mx based on which direction was chosen
           float C_mx = phi_mx == phi_m[0] ? C[neighbor.x, neighbor.y][0] : C[neighbor.x, neighbor.y][2];
@@ -226,12 +227,12 @@ namespace Yohash.ContinuumCrowds
           // test the quadratic
           if (phi_mDiff_Sq > valTest) {
             // use the simplified solution for phi_proposed
-            float phi_min = Math.Min(phi_mx, phi_my);
+            float phi_min = Min(phi_mx, phi_my);
             float cost_min = phi_min == phi_mx ? C_mx : C_my;
             phi_proposed = cost_min + phi_min;
           } else {
             // solve the quadratic
-            var radical = Math.Sqrt(C_mx_Sq * C_my_Sq * (C_mx_Sq + C_my_Sq - phi_mDiff_Sq));
+            var radical = Sqrt(C_mx_Sq * C_my_Sq * (C_mx_Sq + C_my_Sq - phi_mDiff_Sq));
 
             var soln1 = (C_my_Sq * phi_mx + C_mx_Sq * phi_my + radical) / (C_mx_Sq + C_my_Sq);
             var soln2 = (C_my_Sq * phi_mx + C_mx_Sq * phi_my - radical) / (C_mx_Sq + C_my_Sq);
@@ -249,8 +250,8 @@ namespace Yohash.ContinuumCrowds
             //phi_proposed = (float)Math.Sqrt(soln1 * soln2);
 
             // weighted mean - appears to offer the best compromise
-            var max = (float)Math.Max(soln1, soln2);
-            var min = (float)Math.Min(soln1, soln2);
+            var max = (float)Max(soln1, soln2);
+            var min = (float)Min(soln1, soln2);
             float wMax = CcValues.S.maxWeight;
             float wMin = CcValues.S.minWeight;
             phi_proposed = (float)(max * wMax + min * wMin) / (wMax + wMin);
