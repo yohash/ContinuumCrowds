@@ -1,4 +1,4 @@
-﻿using Priority_Queue;
+﻿using Yohash.PriorityQueue;
 
 public class FastLocation : FastPriorityQueueNode
 {

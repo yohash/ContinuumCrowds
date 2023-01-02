@@ -162,6 +162,13 @@
       "dependencies": {},
       "hash": "0f1019356c6f745537ef3358a71cee3c51709ca5"
     },
+    "com.yohash.priorityqueue": {
+      "version": "https://github.com/yohash/PriorityQueue.git#upm",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "5925cdcfd63eae100287a62eb7008f4e7641b17b"
+    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,
