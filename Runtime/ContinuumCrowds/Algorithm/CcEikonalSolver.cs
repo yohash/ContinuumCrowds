@@ -1,10 +1,9 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using Yohash.PriorityQueue;
 
 using static System.Math;
-using Priority_Queue;
-
 
 namespace Yohash.ContinuumCrowds
 {
