@@ -10,7 +10,10 @@ This original implementation is derived from the source material.
 
 Add to your project via the Unity Package Manager. 
 1. In the Package Manger, select "Add package from Git URL..."
-2. Type in `https://github.com/yohash/ContinuumCrowds.git#upm`
+2. Type in 
+```
+https://github.com/yohash/ContinuumCrowds.git#upm
+```
 
 The `upm` branch is maintained us a current subtree via:
 ```
