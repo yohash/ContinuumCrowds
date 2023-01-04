@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 
-public interface IPathable
+namespace Yohash.ContinuumCrowds
 {
-  IEnumerable<IPathable> Neighbors();
-  float Heuristic(Location endGoal);
-  float Cost(IPathable neighbor);
-  Location AsLocation();
+  public interface IPathable
+  {
+    IEnumerable<IPathable> Neighbors();
+    float Heuristic(Location endGoal);
+    float Cost(IPathable neighbor);
+    Location AsLocation();
+  }
 }
