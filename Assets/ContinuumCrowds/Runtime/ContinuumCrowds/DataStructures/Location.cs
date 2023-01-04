@@ -1,61 +1,64 @@
 ﻿using System;
 
-[Serializable]
-public partial struct Location : IEquatable<Location>
+namespace Yohash.ContinuumCrowds
 {
-  public readonly int x;
-  public readonly int y;
-
-  public Location(int x, int y)
+  [Serializable]
+  public partial struct Location : IEquatable<Location>
   {
-    this.x = x;
-    this.y = y;
-  }
+    public readonly int x;
+    public readonly int y;
 
-  public Location(double x, double y)
-  {
-    this.x = (int)Math.Round(x, 0);
-    this.y = (int)Math.Round(y, 0);
-  }
+    public Location(int x, int y)
+    {
+      this.x = x;
+      this.y = y;
+    }
 
-  public override string ToString()
-  {
-    return $"({x}, {y})";
-  }
+    public Location(double x, double y)
+    {
+      this.x = (int)System.Math.Round(x, 0);
+      this.y = (int)System.Math.Round(y, 0);
+    }
 
-  // *******************************************************************
-  //    IEquatable
-  // *******************************************************************
-  public bool Equals(Location l2)
-  {
-    return x == l2.x && y == l2.y;
-  }
+    public override string ToString()
+    {
+      return $"({x}, {y})";
+    }
 
-  public override bool Equals(object obj)
-  {
-    return obj is Location l && Equals(l);
-  }
+    // *******************************************************************
+    //    IEquatable
+    // *******************************************************************
+    public bool Equals(Location l2)
+    {
+      return x == l2.x && y == l2.y;
+    }
 
-  public static bool Equals(Location l1, Location l2)
-  {
-    return l1.Equals(l2);
-  }
+    public override bool Equals(object obj)
+    {
+      return obj is Location l && Equals(l);
+    }
 
-  public static bool operator ==(Location l1, Location l2)
-  {
-    return l1.Equals(l2);
-  }
+    public static bool Equals(Location l1, Location l2)
+    {
+      return l1.Equals(l2);
+    }
 
-  public static bool operator !=(Location l1, Location l2)
-  {
-    return !l1.Equals(l2);
-  }
+    public static bool operator ==(Location l1, Location l2)
+    {
+      return l1.Equals(l2);
+    }
 
-  public override int GetHashCode()
-  {
-    int hash = 17;
-    hash = (31 * hash) + x;
-    hash = (31 * hash) + y;
-    return hash;
+    public static bool operator !=(Location l1, Location l2)
+    {
+      return !l1.Equals(l2);
+    }
+
+    public override int GetHashCode()
+    {
+      int hash = 17;
+      hash = (31 * hash) + x;
+      hash = (31 * hash) + y;
+      return hash;
+    }
   }
 }
