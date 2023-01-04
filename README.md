@@ -19,3 +19,15 @@ The `upm` branch is maintained us a current subtree via:
 ```
 git subtree split --prefix=Assets/ContinuumCrowds --branch upm
 ```
+
+## Dependencies
+
+This package has a dependency on another custom package. To allow for automatic installion of dependencies
+- [yohash.math](https://github.com/yohash/Math)
+- [yohash.priorityqueue](https://github.com/yohash/PriorityQueue)
+please first install the [mob-sakai/GitDependencyResolverForUnity](https://github.com/mob-sakai/GitDependencyResolverForUnity).
+
+The git dependency resolver can be installed easily in the Unity package manager with this direct git link:
+```
+https://github.com/mob-sakai/GitDependencyResolverForUnity.git
+```
