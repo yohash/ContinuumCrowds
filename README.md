@@ -23,7 +23,7 @@ git subtree split --prefix=Assets/ContinuumCrowds --branch upm
 ## Dependencies
 
 This package has a dependency on another custom package. To allow for automatic installion of dependencies
-- [yohash.math](https://github.com/yohash/Math)
+- [yohash.tools](https://github.com/yohash/NavTools)
 - [yohash.priorityqueue](https://github.com/yohash/PriorityQueue)
 
 Please first install the [mob-sakai/GitDependencyResolverForUnity](https://github.com/mob-sakai/GitDependencyResolverForUnity). The git dependency resolver can be installed in the Unity package manager with this direct git link:
