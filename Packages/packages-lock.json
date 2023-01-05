@@ -155,19 +155,12 @@
       },
       "url": "https://packages.unity.com"
     },
-    "com.yohash.datastructures": {
-      "version": "https://github.com/yohash/NavDataStructures.git#upm",
+    "com.yohash.navtools": {
+      "version": "https://github.com/yohash/NavTools.git#upm",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "a3ddea75e0322b42416e7113e029bb28dee7011f"
-    },
-    "com.yohash.math": {
-      "version": "https://github.com/yohash/Math.git#upm",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "0f1019356c6f745537ef3358a71cee3c51709ca5"
+      "hash": "cdbdf6a900f7058636cbadffb3a9a6e2c90771b1"
     },
     "com.yohash.priorityqueue": {
       "version": "https://github.com/yohash/PriorityQueue.git#upm",

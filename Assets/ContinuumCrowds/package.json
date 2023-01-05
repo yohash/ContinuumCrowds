@@ -10,9 +10,8 @@
   "licensesUrl": "https://example.com/licensing.html",
   "dependencies": { },
   "gitDependencies": {
-    "com.yohash.math": "https://github.com/yohash/Math.git#upm",
-    "com.yohash.priorityqueue": "https://github.com/yohash/PriorityQueue.git#upm",
-    "com.yohash.datastructures": "https://github.com/yohash/NavDataStructures.git#upm"
+    "com.yohash.tools": "https://github.com/yohash/NavTools.git#upm",
+    "com.yohash.priorityqueue": "https://github.com/yohash/PriorityQueue.git#upm"
   },
   "keywords": [
     "continuum",
