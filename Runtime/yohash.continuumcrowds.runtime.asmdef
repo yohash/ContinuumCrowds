@@ -3,7 +3,8 @@
     "rootNamespace": "",
     "references": [
         "yohash.math.runtime",
-        "yohash.priorityqueue.runtime"
+        "yohash.priorityqueue.runtime",
+        "yohash.datastructures.runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Yohash.DataStructures;
 
 using static System.Math;
 

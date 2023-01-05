@@ -1,3 +1,4 @@
+using Yohash.DataStructures;
 
 namespace Yohash.ContinuumCrowds
 {
