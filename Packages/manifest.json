@@ -10,6 +10,7 @@
     "com.unity.timeline": "1.6.4",
     "com.unity.ugui": "1.0.0",
     "com.unity.visualscripting": "1.7.8",
+    "com.yohash.datastructures": "https://github.com/yohash/NavDataStructures.git#upm",
     "com.yohash.math": "https://github.com/yohash/Math.git#upm",
     "com.yohash.priorityqueue": "https://github.com/yohash/PriorityQueue.git#upm",
     "com.unity.modules.ai": "1.0.0",

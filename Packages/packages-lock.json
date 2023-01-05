@@ -155,6 +155,13 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.yohash.datastructures": {
+      "version": "https://github.com/yohash/NavDataStructures.git#upm",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "a3ddea75e0322b42416e7113e029bb28dee7011f"
+    },
     "com.yohash.math": {
       "version": "https://github.com/yohash/Math.git#upm",
       "depth": 0,
