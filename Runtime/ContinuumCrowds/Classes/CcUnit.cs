@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections.Generic;
-using Yohash.Math;
-
-using static System.Math;
+using Yohash.Tools;
 
 namespace Yohash.ContinuumCrowds
 {
@@ -290,7 +289,7 @@ namespace Yohash.ContinuumCrowds
       //var footprint = _ccUnitInterface.Footprint();
 
       // (1) compute values
-      var distance = (int)Ceiling(speed * distanceScalar);
+      var distance = (int)Math.Ceiling(speed * distanceScalar);
       var footprintEnd = Mathf.FloorToInt(FootprintRadialFalloff + Size.x + 1);
 
       var start = CcValues.S.v_scaleMax;

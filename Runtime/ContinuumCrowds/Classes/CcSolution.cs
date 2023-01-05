@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Yohash.Math;
-using Yohash.DataStructures;
+using Yohash.Tools;
 
 namespace Yohash.ContinuumCrowds
 {

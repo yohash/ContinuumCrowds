@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using Yohash.DataStructures;
+using Yohash.Tools;
 
 namespace Yohash.ContinuumCrowds
 {

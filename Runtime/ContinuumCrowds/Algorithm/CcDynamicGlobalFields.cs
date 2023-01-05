@@ -1,8 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Yohash.DataStructures;
-
-using static System.Math;
+using Yohash.Tools;
 
 namespace Yohash.ContinuumCrowds
 {
@@ -211,7 +210,7 @@ namespace Yohash.ContinuumCrowds
       // the flow speed is simply the average velocity field of the region
       // INTO WHICH we are looking, dotted with the direction vector
       float dot = vAve.x * direction.x + vAve.y * direction.y;
-      return Max(CcValues.S.f_speedMin, dot);
+      return Math.Max(CcValues.S.f_speedMin, dot);
     }
 
     private static void computeCostField(CcTile cct, ref Dictionary<Location, CcTile> tiles)
@@ -280,8 +279,8 @@ namespace Yohash.ContinuumCrowds
     private static Location tileCornerFromGlobalCoords(int tileSize, int xGlobal, int yGlobal)
     {
       var loc = new Location(
-        Floor((double)xGlobal / tileSize) * tileSize,
-        Floor((double)yGlobal / tileSize) * tileSize
+        Math.Floor((double)xGlobal / tileSize) * tileSize,
+        Math.Floor((double)yGlobal / tileSize) * tileSize
       );
       return loc;
     }

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
-using Yohash.DataStructures;
+using Yohash.Tools;
 
 namespace Yohash.ContinuumCrowds
 {

@@ -2,9 +2,8 @@
 	"name": "yohash.continuumcrowds.runtime",
     "rootNamespace": "",
     "references": [
-        "yohash.math.runtime",
-        "yohash.priorityqueue.runtime",
-        "yohash.datastructures.runtime"
+        "yohash.navtools.runtime",
+        "yohash.priorityqueue.runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
