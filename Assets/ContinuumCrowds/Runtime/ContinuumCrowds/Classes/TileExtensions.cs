@@ -2,26 +2,26 @@ using Yohash.Tools;
 
 namespace Yohash.ContinuumCrowds
 {
-  public static class CcTileExtensions
+  public static class TileExtensions
   {
-    public static bool ContainsLocalPoint(this CcTile tile, int x, int y)
+    public static bool ContainsLocalPoint(this Tile tile, int x, int y)
     {
       return 0 <= x && x <= tile.SizeX - 1
           && 0 <= y && y <= tile.SizeY - 1;
     }
 
-    public static bool ContainsGlobalPoint(this CcTile tile, Location l)
+    public static bool ContainsGlobalPoint(this Tile tile, Location l)
     {
       return tile.ContainsGlobalPoint(l.x, l.y);
     }
 
-    public static bool ContainsGlobalPoint(this CcTile tile, int x, int y)
+    public static bool ContainsGlobalPoint(this Tile tile, int x, int y)
     {
       return tile.Corner.x <= x && x <= tile.Corner.x + tile.SizeX - 1
           && tile.Corner.y <= y && y <= tile.Corner.y + tile.SizeY - 1;
     }
 
-    public static bool IsLocalPointValid(this CcTile tile, int x, int y)
+    public static bool IsLocalPointValid(this Tile tile, int x, int y)
     {
       // check to make sure the point is not outside the tile
       if (!tile.ContainsLocalPoint(x, y)) {

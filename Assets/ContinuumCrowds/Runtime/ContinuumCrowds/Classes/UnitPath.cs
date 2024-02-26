@@ -5,20 +5,20 @@ using Yohash.Tools;
 
 namespace Yohash.ContinuumCrowds
 {
-  public class CcUnitPath
+  public class UnitPath
   {
     // IF the unit is on a tile that doesn't exist in this solution,
     //      we need to determine the best way back to the nearest tile
 
     // maintain a linked list of destinations as well, so we can try
     // daisy-chaining our references
-    private LinkedList<CcDestination> destinations;
+    private LinkedList<Destination> destinations;
 
     /// <summary>
     /// Tracking the current destination
     /// </summary>
-    private LinkedListNode<CcDestination> _current;
-    public CcDestination CurrentDestination {
+    private LinkedListNode<Destination> _current;
+    public Destination CurrentDestination {
       get { return _current.Value; }
     }
 
@@ -28,13 +28,13 @@ namespace Yohash.ContinuumCrowds
     /// </summary>
     /// <param name="portals"></param>
     /// <param name="navSystem"></param>
-    public CcUnitPath(
+    public UnitPath(
       IEnumerable<Portal> portals,
-      Dictionary<Location, CcTile> tiles,
+      Dictionary<Location, Tile> tiles,
       Func<Location, Location> hashTileLocation
     )
     {
-      destinations = new LinkedList<CcDestination>();
+      destinations = new LinkedList<Destination>();
 
       foreach (var portal in portals) {
         // see if this is the starting or end portal
@@ -42,7 +42,7 @@ namespace Yohash.ContinuumCrowds
         if (singular && destinations.Count == 0) {
           var hashed = hashTileLocation(portal.borderA[0]);
           var tiled = tiles[hashed];
-          var dest = new CcDestination(
+          var dest = new Destination(
             tiled,
             portal.borderA.ToList()
           );
@@ -61,7 +61,7 @@ namespace Yohash.ContinuumCrowds
           // this is the start
           var hashed = hashTileLocation(portal.borderA[0]);
           var tiled = tiles[hashed];
-          var desty = new CcDestination(
+          var desty = new Destination(
             tiled,
             portal.borderA.ToList()
           );
@@ -84,7 +84,7 @@ namespace Yohash.ContinuumCrowds
 
         // grab the next tile based on the chosen portal,
         var nextTile = tiles[nextPortal[0]];
-        var destination = new CcDestination(
+        var destination = new Destination(
           // TODO - VERIFY that I can path off an edge like this
           lastTile,
           new List<Location>(nextPortal)

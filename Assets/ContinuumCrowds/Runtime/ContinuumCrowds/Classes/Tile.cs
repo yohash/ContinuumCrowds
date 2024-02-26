@@ -4,7 +4,7 @@ using Yohash.Tools;
 
 namespace Yohash.ContinuumCrowds
 {
-  public class CcTile
+  public class Tile
   {
     /// <summary>
     /// Units who will impact this tile
@@ -57,7 +57,7 @@ namespace Yohash.ContinuumCrowds
     private Vector4[,] _fbaseline;
     private Vector4[,] _Cbaseline;
 
-    public CcTile(Location location, float[,] g, float[,] h, Vector2[,] dh)
+    public Tile(Location location, float[,] g, float[,] h, Vector2[,] dh)
     {
       _corner = location;
 
@@ -77,11 +77,11 @@ namespace Yohash.ContinuumCrowds
       _fbaseline = new Vector4[x, y];
       _Cbaseline = new Vector4[x, y];
 
-      float f0 = CcValues.S.FlatSpeed;
+      float f0 = Constants.Values.FlatSpeed;
 
       // initialize speed and cost fields
       Vector4 f_init = f0 * Vector4.one;
-      Vector4 C_init = Vector4.one * (f0 * CcValues.S.C_alpha + CcValues.S.C_beta) / f0;
+      Vector4 C_init = Vector4.one * (f0 * Constants.Values.C_alpha + Constants.Values.C_beta) / f0;
 
       for (int i = 0; i < x; i++) {
         for (int k = 0; k < y; k++) {

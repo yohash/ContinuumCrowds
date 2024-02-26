@@ -3,13 +3,17 @@ using UnityEngine;
 namespace Yohash.ContinuumCrowds
 {
   [CreateAssetMenu(menuName = "New Continuum Crowds Constants", fileName = "CCConstants")]
-  public class CcValues : ScriptableObject
+  public class Constants : ScriptableObject
   {
-    static private CcValues instance;
-    static public CcValues S {
+    /// <summary>
+    /// Assign this to a static variable when your code instantiates to
+    /// reference a local Scriptable Object. This will allow you to
+    /// modify the values in the Unity Editor and have them update in realtime
+    /// </summary>
+    public static Constants Instance;
+    public static Constants Values {
       get {
-        return instance ??
-          (instance = Resources.Load("CCConstants") as CcValues);
+        return Instance ?? default;
       }
     }
 
@@ -72,16 +76,16 @@ namespace Yohash.ContinuumCrowds
 
     // this array of Vect2's correlates to our data format: Vector4(x, y, z, w) = (+x, +y, -x, -y)
     public Vector2[] ENSW = new Vector2[] {
-    Vector2.right,
-    Vector2.up,
-    Vector2.left,
-    Vector2.down
-  };
+      Vector2.right,
+      Vector2.up,
+      Vector2.left,
+      Vector2.down
+    };
     public Vector2Int[] ENSWint = new Vector2Int[] {
-    Vector2Int.right,
-    Vector2Int.up,
-    Vector2Int.left,
-    Vector2Int.down
-  };
+      Vector2Int.right,
+      Vector2Int.up,
+      Vector2Int.left,
+      Vector2Int.down
+    };
   }
 }

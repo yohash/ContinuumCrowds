@@ -6,7 +6,7 @@ using Yohash.Tools;
 
 namespace Yohash.ContinuumCrowds
 {
-  public class CcDestination : IEquatable<CcDestination>
+  public class Destination : IEquatable<Destination>
   {
     /// <summary>
     /// The corner location of the tile
@@ -28,7 +28,7 @@ namespace Yohash.ContinuumCrowds
     private int _hash;
     private bool hashed = false;
 
-    public CcDestination(CcTile tile, List<Location> goal)
+    public Destination(Tile tile, List<Location> goal)
       => (_location, _goal) = (tile.Corner, goal);
 
     public bool GoalContainsPoint(Vector2 point)
@@ -40,7 +40,7 @@ namespace Yohash.ContinuumCrowds
     // *******************************************************************
     //    IEquatable
     // *******************************************************************
-    public bool Equals(CcDestination destination)
+    public bool Equals(Destination destination)
     {
       return destination.TileHash == TileHash &&
         Enumerable.SequenceEqual(destination.Goal, Goal);
@@ -48,7 +48,7 @@ namespace Yohash.ContinuumCrowds
 
     public override bool Equals(object obj)
     {
-      return obj is CcDestination destination
+      return obj is Destination destination
         && _location.Equals(destination._location)
         && Enumerable.SequenceEqual(destination._goal, _goal);
     }
