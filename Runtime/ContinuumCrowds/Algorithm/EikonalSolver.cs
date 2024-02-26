@@ -29,7 +29,7 @@ namespace Yohash.ContinuumCrowds
   //  |  	5) if U'<Ui, then Ui=U' and label xi as considered
   //  ---	6) if there is a considered node, repeat from step 3
 
-  public class CcEikonalSolver
+  public class EikonalSolver
   {
     /// Continuum Crowd fields (we're solving for these)
     // potential field
@@ -61,7 +61,7 @@ namespace Yohash.ContinuumCrowds
     private int M;
 
     // callback on complete
-    private Action<CcEikonalSolver> onComplete;
+    private Action<EikonalSolver> onComplete;
 
     // this array of Vect2's correlates to our data format: Vector4(x, y, z, w) = (+x, +y, -x, -y)
     private Vector2[] DIR_ENWS = new Vector2[] { Vector2.right, Vector2.up, Vector2.left, Vector2.down };
@@ -69,12 +69,12 @@ namespace Yohash.ContinuumCrowds
     // *************************************************************************
     //    ACCESSOR
     // *************************************************************************
-    public CcEikonalSolver() { }
+    public EikonalSolver() { }
 
     public void Solve(
-        CcTile tile,
+        Tile tile,
         List<Location> goal,
-        Action<CcEikonalSolver> onComplete
+        Action<EikonalSolver> onComplete
     )
     {
       f = tile.f;
@@ -121,7 +121,7 @@ namespace Yohash.ContinuumCrowds
 
     private void computePotentialField(List<Location> goal)
     {
-      EikonalSolver(goal);
+      eikonalSolver(goal);
     }
 
     // *************************************************************************
@@ -132,7 +132,7 @@ namespace Yohash.ContinuumCrowds
     /// </summary>
     /// <param name="fields"></param>
     /// <param name="goal"></param>
-    private void EikonalSolver(List<Location> goal)
+    private void eikonalSolver(List<Location> goal)
     {
       // start by assigning all values of potential a huge number to in-effect label them 'far'
       for (int n = 0; n < N; n++) {
@@ -250,8 +250,8 @@ namespace Yohash.ContinuumCrowds
             // weighted mean - appears to offer the best compromise
             var max = (float)Math.Max(soln1, soln2);
             var min = (float)Math.Min(soln1, soln2);
-            float wMax = CcValues.S.maxWeight;
-            float wMin = CcValues.S.minWeight;
+            float wMax = Constants.Values.maxWeight;
+            float wMin = Constants.Values.minWeight;
             phi_proposed = (float)(max * wMax + min * wMin) / (wMax + wMin);
           }
 

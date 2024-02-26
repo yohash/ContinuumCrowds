@@ -4,29 +4,29 @@ using Yohash.Tools;
 
 namespace Yohash.ContinuumCrowds
 {
-  public class CcSolution
+  public class Solution
   {
     /// <summary>
     /// The status of this solutions solving process
     /// </summary>
-    public enum Solution { New, Is_Solving, Has_Solution }
-    private Solution _status;
-    public Solution Status {
+    public enum State { New, Is_Solving, Has_Solution }
+    private State _status;
+    public State Status {
       get { return _status; }
     }
-    public void IsSolving() { _status = Solution.Is_Solving; }
+    public void IsSolving() { _status = State.Is_Solving; }
     public void HasSolution()
     {
       // TODO - write an algorithm that helps determine this update interval
       //_nextUpdate = 0.1f;
-      _status = Solution.Has_Solution;
+      _status = State.Has_Solution;
     }
 
     /// <summary>
     /// The destination of this Continuum Crowds solution
     /// </summary>
-    private readonly CcDestination _destination;
-    public CcDestination Destination {
+    private readonly Destination _destination;
+    public Destination Destination {
       get { return _destination; }
     }
 
@@ -52,7 +52,7 @@ namespace Yohash.ContinuumCrowds
     /// connecting units to an Eikonal Solution.
     /// </summary>
     /// <param name="destination"></param>
-    public CcSolution(CcDestination destination)
+    public Solution(Destination destination)
     {
       _destination = destination;
     }
@@ -89,7 +89,7 @@ namespace Yohash.ContinuumCrowds
     /// </summary>
     /// <param name="velocity"></param>
     /// <param name="unitsByIdRef"></param>
-    public void UpdateUnits(ref Vector2[,] velocity, ref Dictionary<int, CcUnit> unitsByIdRef)
+    public void UpdateUnits(ref Vector2[,] velocity, ref Dictionary<int, Unit> unitsByIdRef)
     {
       // pull our ref to the Eikonal Solver
       // call our unit update with their velocity

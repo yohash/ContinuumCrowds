@@ -5,7 +5,7 @@ using Yohash.Tools;
 
 namespace Yohash.ContinuumCrowds
 {
-  public class CcUnit
+  public class Unit
   {
     /// <summary>
     /// The status of this unit's Nav solution
@@ -39,8 +39,8 @@ namespace Yohash.ContinuumCrowds
     private float _falloff;
     public float FootprintRadialFalloff {
       get {
-        if (_falloff != CcValues.S.u_unitRadialFalloff) {
-          _falloff = CcValues.S.u_unitRadialFalloff;
+        if (_falloff != Constants.Values.u_unitRadialFalloff) {
+          _falloff = Constants.Values.u_unitRadialFalloff;
           _baseFootprint = computeBaseFootprint();
         }
         return _falloff;
@@ -50,7 +50,7 @@ namespace Yohash.ContinuumCrowds
     /// <summary>
     /// Continuum Crowds unit interface access
     /// </summary>
-    private ICcUnit _ccUnitInterface;
+    private IUnit _ccUnitInterface;
 
     /// <summary>
     /// Set the velocity on the cc unit interface
@@ -134,8 +134,8 @@ namespace Yohash.ContinuumCrowds
     /// TODO - remove this coupling between CCUnit and CCSolution.
     ///         perform this subscribe/unsub in NavSystem somehow
     /// </summary>
-    private CcSolution _subscribedSolution;
-    public CcSolution SubscribedSolution {
+    private Solution _subscribedSolution;
+    public Solution SubscribedSolution {
       get { return _subscribedSolution; }
       set {
         if (_subscribedSolution == value) { return; }
@@ -154,7 +154,7 @@ namespace Yohash.ContinuumCrowds
     /// list is computed by an external algorithm, and stored
     /// here locally for diffing.
     /// </summary>
-    private List<CcTile> currentTiles = new List<CcTile>();
+    private List<Tile> currentTiles = new List<Tile>();
 
     // local tracking variable for position diffing
     private Vector2 _position;
@@ -164,7 +164,7 @@ namespace Yohash.ContinuumCrowds
     /// CC Unit interface implemented by the unit represented
     /// </summary>
     /// <param name="ccUnitInterface"></param>
-    public CcUnit(ICcUnit ccUnitInterface)
+    public Unit(IUnit ccUnitInterface)
     {
       _ccUnitInterface = ccUnitInterface;
       _position = ccUnitInterface.Position();
@@ -174,7 +174,7 @@ namespace Yohash.ContinuumCrowds
     /// <summary>
     /// In this destructor, unsubscribe from all our delegates
     /// </summary>
-    ~CcUnit()
+    ~Unit()
     {
       foreach (var tile in currentTiles) {
         tile.Unsubscribe(_ccUnitInterface.UniqueId());
@@ -193,7 +193,7 @@ namespace Yohash.ContinuumCrowds
     ///     Feels like extra work that an outside agent should manage
     /// </summary>
     /// <param name="newTiles"></param>
-    public void DiffInfluencingTiles(List<CcTile> newTiles)
+    public void DiffInfluencingTiles(List<Tile> newTiles)
     {
       foreach (var newTile in newTiles) {
         if (!currentTiles.Contains(newTile)) {
@@ -258,7 +258,7 @@ namespace Yohash.ContinuumCrowds
 
     public Vector2 DriverReference {
       get {
-        var yOff = new Vector2(0, Size.y / 2f + CcValues.S.u_driverSeatOffset);
+        var yOff = new Vector2(0, Size.y / 2f + Constants.Values.u_driverSeatOffset);
         yOff = yOff.Rotate(-_ccUnitInterface.Rotation() * Mathf.Deg2Rad);
         return Position + yOff;
       }
@@ -292,8 +292,8 @@ namespace Yohash.ContinuumCrowds
       var distance = (int)Math.Ceiling(speed * distanceScalar);
       var footprintEnd = Mathf.FloorToInt(FootprintRadialFalloff + Size.x + 1);
 
-      var start = CcValues.S.v_scaleMax;
-      var end = CcValues.S.v_scaleMin;
+      var start = Constants.Values.v_scaleMax;
+      var end = Constants.Values.v_scaleMin;
 
       var predictive = Fields.LinearFadeout(BaseFootprint, footprintEnd, distance, start, end);
 

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Yohash.ContinuumCrowds
 {
-  public interface ICcUnit
+  public interface IUnit
   {
     int UniqueId();
     Vector2 Velocity();
