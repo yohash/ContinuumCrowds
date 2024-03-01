@@ -276,45 +276,41 @@ namespace Yohash.ContinuumCrowds
         return false;
       }
       // return validity for the tile point
-      return tiles[corner].IsLocalPointValid(xGlobal - corner.x, yGlobal - corner.y);
-    }
-
-    private static Location tileCoordsFromGlobal(Tile tile, int xGlobal, int yGlobal)
-    {
-      return new Location(xGlobal % tile.SizeX + tile.Corner.x, yGlobal % tile.SizeY + tile.Corner.y);
+      var local = tile.LocalFromGlobal(xGlobal, yGlobal);
+      return tiles[corner].IsLocalPointValid(local.x, local.y);
     }
 
     // ******************************************************************************************
     //                 TILE READ/WRITE OPS
     //
-    //  Primary focus of this area is to convert global points (what CC Dynamic Global Fields
+    //  Primary focus of this area is to convert global points (what Dynamic Global Fields
     //  works with) into local points, and then find the relevant tile
     // ******************************************************************************************
     private static Vector2 readDataFromPoint_dh(Tile tile, int xGlobal, int yGlobal, ref Dictionary<Location, Tile> tiles)
     {
       var corner = tile.Corner;
-      var local = tileCoordsFromGlobal(tile, xGlobal, yGlobal);
+      var local = tile.LocalFromGlobal(xGlobal, yGlobal);
       return tiles[corner].dh[local.x, local.y];
     }
 
     private static float readDataFromPoint_rho(Tile tile, int xGlobal, int yGlobal, ref Dictionary<Location, Tile> tiles)
     {
       var corner = tile.Corner;
-      var local = tileCoordsFromGlobal(tile, xGlobal, yGlobal);
+      var local = tile.LocalFromGlobal(xGlobal, yGlobal);
       return tiles[corner].rho[local.x, local.y];
     }
 
     private static float readDataFromPoint_g(Tile tile, int xGlobal, int yGlobal, ref Dictionary<Location, Tile> tiles)
     {
       var corner = tile.Corner;
-      var local = tileCoordsFromGlobal(tile, xGlobal, yGlobal);
+      var local = tile.LocalFromGlobal(xGlobal, yGlobal);
       return tiles[corner].g[local.x, local.y];
     }
 
     private static Vector2 readDataFromPoint_vAve(Tile tile, int xGlobal, int yGlobal, ref Dictionary<Location, Tile> tiles)
     {
       var corner = tile.Corner;
-      var local = tileCoordsFromGlobal(tile, xGlobal, yGlobal);
+      var local = tile.LocalFromGlobal(xGlobal, yGlobal);
       return tiles[corner].vAve[local.x, local.y];
     }
   }

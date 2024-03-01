@@ -1,3 +1,4 @@
+using UnityEngine;
 using Yohash.Tools;
 
 namespace Yohash.ContinuumCrowds
@@ -19,6 +20,11 @@ namespace Yohash.ContinuumCrowds
     {
       return tile.Corner.x <= x && x <= tile.Corner.x + tile.SizeX - 1
           && tile.Corner.y <= y && y <= tile.Corner.y + tile.SizeY - 1;
+    }
+
+    public static Vector2Int LocalFromGlobal(this Tile tile, int x, int y)
+    {
+      return new Vector2Int(x - tile.Corner.x, y - tile.Corner.y);
     }
 
     public static bool IsLocalPointValid(this Tile tile, int x, int y)
