@@ -17,6 +17,7 @@ namespace Yohash.ContinuumCrowds
 
     public int SizeX { get { return g.GetLength(0); } }
     public int SizeY { get { return g.GetLength(1); } }
+    public Vector2Int Size { get { return new Vector2Int(SizeX, SizeY); } }
 
     /// <summary>
     /// The lowest x,y corner of this tile
