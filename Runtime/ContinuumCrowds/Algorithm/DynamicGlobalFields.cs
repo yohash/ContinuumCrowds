@@ -279,9 +279,9 @@ namespace Yohash.ContinuumCrowds
       return tiles[corner].IsLocalPointValid(xGlobal - corner.x, yGlobal - corner.y);
     }
 
-    private static Location tileCoordsFromGlobal(Location l, Vector2Int tileSize, int xGlobal, int yGlobal)
+    private static Location tileCoordsFromGlobal(Tile tile, int xGlobal, int yGlobal)
     {
-      return new Location(xGlobal % tileSize.x, yGlobal % tileSize.y);
+      return new Location(xGlobal % tile.SizeX + tile.Corner.x, yGlobal % tile.SizeY + tile.Corner.y);
     }
 
     // ******************************************************************************************
@@ -293,28 +293,28 @@ namespace Yohash.ContinuumCrowds
     private static Vector2 readDataFromPoint_dh(Tile tile, int xGlobal, int yGlobal, ref Dictionary<Location, Tile> tiles)
     {
       var corner = tile.Corner;
-      var local = tileCoordsFromGlobal(corner, tile.Size, xGlobal, yGlobal);
+      var local = tileCoordsFromGlobal(tile, xGlobal, yGlobal);
       return tiles[corner].dh[local.x, local.y];
     }
 
     private static float readDataFromPoint_rho(Tile tile, int xGlobal, int yGlobal, ref Dictionary<Location, Tile> tiles)
     {
       var corner = tile.Corner;
-      var local = tileCoordsFromGlobal(corner, tile.Size, xGlobal, yGlobal);
+      var local = tileCoordsFromGlobal(tile, xGlobal, yGlobal);
       return tiles[corner].rho[local.x, local.y];
     }
 
     private static float readDataFromPoint_g(Tile tile, int xGlobal, int yGlobal, ref Dictionary<Location, Tile> tiles)
     {
       var corner = tile.Corner;
-      var local = tileCoordsFromGlobal(corner, tile.Size, xGlobal, yGlobal);
+      var local = tileCoordsFromGlobal(tile, xGlobal, yGlobal);
       return tiles[corner].g[local.x, local.y];
     }
 
     private static Vector2 readDataFromPoint_vAve(Tile tile, int xGlobal, int yGlobal, ref Dictionary<Location, Tile> tiles)
     {
       var corner = tile.Corner;
-      var local = tileCoordsFromGlobal(corner, tile.Size, xGlobal, yGlobal);
+      var local = tileCoordsFromGlobal(tile, xGlobal, yGlobal);
       return tiles[corner].vAve[local.x, local.y];
     }
   }
