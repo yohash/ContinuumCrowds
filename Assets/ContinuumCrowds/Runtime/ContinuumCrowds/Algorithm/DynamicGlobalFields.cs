@@ -11,65 +11,68 @@ namespace Yohash.ContinuumCrowds
   public static class DynamicGlobalFields
   {
     /// <summary>
-    /// TODO - Summary
+    /// Initializes a tile with all baseline speed and cost fields. These
+    /// values are computed for the tile's topology. These baseline fields
+    /// are later used to "hot-reset" the tile.
     /// </summary>
-    /// <param name="cct"></param>
+    /// <param name="tile"></param>
     /// <param name="tiles"></param>
     public static void InitiateTile(
-        Tile cct,
+        Tile tile,
         ref Dictionary<Location, Tile> tiles
     )
     {
-      computeSpeedField(cct, ref tiles);
-      computeCostField(cct, ref tiles);
-      cct.StoreCurrentSpeedAndCostFields();
+      computeSpeedField(tile, ref tiles);
+      computeCostField(tile, ref tiles);
+      tile.StoreCurrentSpeedAndCostFields();
     }
 
     /// <summary>
-    /// TODO - Summary
+    /// Update the tile's fields with the current state of the units that are
+    /// near enough to impact the tile.
     /// </summary>
     /// <param name="updateId"></param>
-    /// <param name="cct"></param>
+    /// <param name="tile"></param>
     /// <param name="tiles"></param>
     /// <param name="units"></param>
     public static void UpdateTile(
         int updateId,
-        Tile cct,
+        Tile tile,
         ref Dictionary<Location, Tile> tiles,
         ref Dictionary<int, Unit> units
     )
     {
       // first, clear the tile
-      cct.ResetTile();
+      tile.ResetTile();
 
       // update the unit specific elements (rho, vAve)
-      foreach (var id in cct.ImpactingUnitsIds()) {
+      foreach (var id in tile.ImpactingUnitsIds()) {
         // (1) apply stationary unit density field (rho)
         // (2) apply predictive density/velocity field (vave)
-        computeUnitFields(units[id], cct);
+        computeUnitFields(units[id], tile);
       }
 
       // these next values are derived from rho and vAve
 
       // (3) 	now that the velocity field and density fields are computed,
       // 		  divide the velocity by density to get average velocity field
-      computeAverageVelocityField(cct);
+      computeAverageVelocityField(tile);
       // (4)	now that the average velocity field is computed, and the density
       // 		  field is in place, we calculate the speed field, f
-      computeSpeedField(cct, ref tiles);
+      computeSpeedField(tile, ref tiles);
       // (5) 	the cost field depends only on f and g, so it can be computed in its
       //		  entirety now as well
-      computeCostField(cct, ref tiles);
+      computeCostField(tile, ref tiles);
 
       // Update the Id last, so that queries to this tile will know that
       // the current (as queried) state of this tile is not-current
-      cct.MarkComplete(updateId);
+      tile.MarkComplete(updateId);
     }
 
     // ******************************************************************************************
     // 							FIELD SOLVING FUNCTIONS
     // ******************************************************************************************
-    private static void computeUnitFields(Unit ccu, Tile cct)
+    private static void computeUnitFields(Unit unit, Tile tile)
     {
       // TODO: Only apply unit fields to continuous segments, ie.
       //      if a portion of this field is blocked by impassable
@@ -83,14 +86,14 @@ namespace Yohash.ContinuumCrowds
       //      relevant to this tile
 
       // fetch the unit's footprint
-      var footprint = ccu.Footprint;
+      var footprint = unit.Footprint;
 
       // offsets - floor produces smoothest interpolated position stamps
-      var xOffset = Mathf.FloorToInt(ccu.Anchor.x);
-      var yOffset = Mathf.FloorToInt(ccu.Anchor.y);
+      var xOffset = Mathf.FloorToInt(unit.Anchor.x);
+      var yOffset = Mathf.FloorToInt(unit.Anchor.y);
 
       // grab velocity to scale the footprint
-      var velocity = ccu.Velocity;
+      var velocity = unit.Velocity;
       // scan the grid, stamping the footprint onto the tile
       for (int x = 0; x < footprint.GetLength(0); x++) {
         for (int y = 0; y < footprint.GetLength(1); y++) {
@@ -100,14 +103,14 @@ namespace Yohash.ContinuumCrowds
           // translate to local coords
           var xIndex = x + xOffset;
           var yIndex = y + yOffset;
-          var xLocal = xIndex - cct.Corner.x;
-          var yLocal = yIndex - cct.Corner.y;
+          var xLocal = xIndex - tile.Corner.x;
+          var yLocal = yIndex - tile.Corner.y;
           // ensure we aren't indexing out of range
-          if (!cct.ContainsLocalPoint(xLocal, yLocal)) { continue; }
+          if (!tile.ContainsLocalPoint(xLocal, yLocal)) { continue; }
           // add rho to the in-place density
-          cct.rho[xLocal, yLocal] += vu;
+          tile.rho[xLocal, yLocal] += vu;
           // add velocity to existing data
-          cct.vAve[xLocal, yLocal] += vu * velocity;
+          tile.vAve[xLocal, yLocal] += vu * velocity;
         }
       }
     }
@@ -117,27 +120,27 @@ namespace Yohash.ContinuumCrowds
     // **********************************************************************
     // average velocity fields will just iterate over each tile, since information
     // doesnt 'bleed' into or out from nearby tiles
-    private static void computeAverageVelocityField(Tile cct)
+    private static void computeAverageVelocityField(Tile tile)
     {
-      for (int n = 0; n < cct.SizeX; n++) {
-        for (int m = 0; m < cct.SizeY; m++) {
-          var v = cct.vAve[n, m];
-          float r = cct.rho[n, m];
+      for (int n = 0; n < tile.SizeX; n++) {
+        for (int m = 0; m < tile.SizeY; m++) {
+          var v = tile.vAve[n, m];
+          float r = tile.rho[n, m];
 
           if (r != 0) {
             v /= r;
           }
-          cct.vAve[n, m] = v;
+          tile.vAve[n, m] = v;
         }
       }
     }
 
-    private static void computeSpeedField(Tile cct, ref Dictionary<Location, Tile> tiles)
+    private static void computeSpeedField(Tile tile, ref Dictionary<Location, Tile> tiles)
     {
-      for (int n = 0; n < cct.SizeX; n++) {
-        for (int m = 0; m < cct.SizeY; m++) {
+      for (int n = 0; n < tile.SizeX; n++) {
+        for (int m = 0; m < tile.SizeY; m++) {
           for (int d = 0; d < Constants.Values.ENSW.Length; d++) {
-            cct.f[n, m][d] = computeSpeedFieldPoint(n, m, cct, Constants.Values.ENSW[d], ref tiles);
+            tile.f[n, m][d] = computeSpeedFieldPoint(n, m, tile, Constants.Values.ENSW[d], ref tiles);
           }
         }
       }
@@ -146,7 +149,7 @@ namespace Yohash.ContinuumCrowds
     private static float computeSpeedFieldPoint(
       int tileX,
       int tileY,
-      Tile cct,
+      Tile tile,
       Vector2 direction,
       ref Dictionary<Location, Tile> tiles
     )
@@ -154,11 +157,11 @@ namespace Yohash.ContinuumCrowds
       int xLocalInto = tileX + (int)direction.x;
       int yLocalInto = tileY + (int)direction.y;
 
-      int xGlobalInto = cct.Corner.x + xLocalInto;
-      int yGlobalInto = cct.Corner.y + yLocalInto;
+      int xGlobalInto = tile.Corner.x + xLocalInto;
+      int yGlobalInto = tile.Corner.y + yLocalInto;
 
       // if the global "into" is not valid, return min speed
-      if (!isGlobalPointValid(cct.Size, xGlobalInto, yGlobalInto, ref tiles)) {
+      if (!isGlobalPointValid(tile, xGlobalInto, yGlobalInto, ref tiles)) {
         return Constants.Values.f_speedMin;
       }
 
@@ -166,24 +169,24 @@ namespace Yohash.ContinuumCrowds
       float ff, ft, fv;
 
       // grab density for the region INTO WHICH we look
-      float rho = !cct.ContainsLocalPoint(xLocalInto, yLocalInto)
+      float rho = !tile.ContainsLocalPoint(xLocalInto, yLocalInto)
         // test to see if the point we're looking INTO is in another tile, and if so, pull it
-        ? readDataFromPoint_rho(cct.Size, xGlobalInto, yGlobalInto, ref tiles)
-        : cct.rho[xLocalInto, yLocalInto];
+        ? readDataFromPoint_rho(tile, xGlobalInto, yGlobalInto, ref tiles)
+        : tile.rho[xLocalInto, yLocalInto];
 
       // test the density INTO WHICH we move:
       if (rho < Constants.Values.f_rhoMin) {
         // rho < rho_min calc
-        ft = computeTopographicalSpeed(readDataFromPoint_dh(cct.Size, xGlobalInto, yGlobalInto, ref tiles), direction);
+        ft = computeTopographicalSpeed(readDataFromPoint_dh(tile, xGlobalInto, yGlobalInto, ref tiles), direction);
         ff = ft;
       } else if (rho > Constants.Values.f_rhoMax) {
         // rho > rho_max calc
-        fv = computeFlowSpeed(readDataFromPoint_vAve(cct.Size, xGlobalInto, yGlobalInto, ref tiles), direction);
+        fv = computeFlowSpeed(readDataFromPoint_vAve(tile, xGlobalInto, yGlobalInto, ref tiles), direction);
         ff = fv;
       } else {
         // rho in-between calc
-        fv = computeFlowSpeed(readDataFromPoint_vAve(cct.Size, xGlobalInto, yGlobalInto, ref tiles), direction);
-        ft = computeTopographicalSpeed(readDataFromPoint_dh(cct.Size, xGlobalInto, yGlobalInto, ref tiles), direction);
+        fv = computeFlowSpeed(readDataFromPoint_vAve(tile, xGlobalInto, yGlobalInto, ref tiles), direction);
+        ft = computeTopographicalSpeed(readDataFromPoint_dh(tile, xGlobalInto, yGlobalInto, ref tiles), direction);
         ff = ft + (fv - ft) * (rho - Constants.Values.f_rhoMin) / (Constants.Values.f_rhoMax - Constants.Values.f_rhoMin);
       }
       return Mathf.Clamp(ff, Constants.Values.f_speedMin, Constants.Values.f_speedMax);
@@ -229,32 +232,32 @@ namespace Yohash.ContinuumCrowds
       int tileY,
       int d,
       Vector2 direction,
-      Tile cct,
+      Tile tile,
       ref Dictionary<Location, Tile> tiles
     )
     {
       int xLocalInto = tileX + (int)direction.x;
       int yLocalInto = tileY + (int)direction.y;
 
-      int xGlobalInto = cct.Corner.x + xLocalInto;
-      int yGlobalInto = cct.Corner.y + yLocalInto;
+      int xGlobalInto = tile.Corner.x + xLocalInto;
+      int yGlobalInto = tile.Corner.y + yLocalInto;
 
       // if we're looking in an invalid direction, dont store this value
-      if (cct.f[tileX, tileY][d] == 0 || !isGlobalPointValid(cct.Size, xGlobalInto, yGlobalInto, ref tiles)) {
+      if (tile.f[tileX, tileY][d] == 0 || !isGlobalPointValid(tile, xGlobalInto, yGlobalInto, ref tiles)) {
         return Mathf.Infinity;
       }
 
       // grab discomfort for the region INTO WHICH we look
-      float g = !cct.ContainsLocalPoint(xLocalInto, yLocalInto)
+      float g = !tile.ContainsLocalPoint(xLocalInto, yLocalInto)
         // test to see if the point we're looking INTO is in another tile, and if so, pull it
-        ? readDataFromPoint_g(cct.Size, xGlobalInto, yGlobalInto, ref tiles)
-        : cct.g[xLocalInto, yLocalInto];
+        ? readDataFromPoint_g(tile, xGlobalInto, yGlobalInto, ref tiles)
+        : tile.g[xLocalInto, yLocalInto];
 
       // clamp g to make sure it's not > 1
       if (g > 1) { g = 1; } else if (g < 0) { g = 0; }
 
       // compute the cost weighted by our coefficients
-      var f = cct.f[tileX, tileY][d];
+      var f = tile.f[tileX, tileY][d];
       float cost = Constants.Values.C_alpha
                   + Constants.Values.C_beta * 1 / f
                   + Constants.Values.C_gamma * g / f;
@@ -265,24 +268,15 @@ namespace Yohash.ContinuumCrowds
     // *****************************************************************************
     //			TOOLS AND UTILITIES
     // *****************************************************************************
-    private static bool isGlobalPointValid(Vector2Int tileSize, int xGlobal, int yGlobal, ref Dictionary<Location, Tile> tiles)
+    private static bool isGlobalPointValid(Tile tile, int xGlobal, int yGlobal, ref Dictionary<Location, Tile> tiles)
     {
-      var corner = tileCornerFromGlobalCoords(tileSize, xGlobal, yGlobal);
+      var corner = tile.Corner;
       // if this tile does not exist, the point is not valid
       if (!tiles.ContainsKey(corner)) {
         return false;
       }
       // return validity for the tile point
       return tiles[corner].IsLocalPointValid(xGlobal - corner.x, yGlobal - corner.y);
-    }
-
-    private static Location tileCornerFromGlobalCoords(Vector2Int tileSize, int xGlobal, int yGlobal)
-    {
-      var loc = new Location(
-        Math.Floor((double)xGlobal / tileSize.x) * tileSize.x,
-        Math.Floor((double)yGlobal / tileSize.y) * tileSize.y
-      );
-      return loc;
     }
 
     private static Location tileCoordsFromGlobal(Location l, Vector2Int tileSize, int xGlobal, int yGlobal)
@@ -296,32 +290,32 @@ namespace Yohash.ContinuumCrowds
     //  Primary focus of this area is to convert global points (what CC Dynamic Global Fields
     //  works with) into local points, and then find the relevant tile
     // ******************************************************************************************
-    private static Vector2 readDataFromPoint_dh(Vector2Int tileSize, int xGlobal, int yGlobal, ref Dictionary<Location, Tile> tiles)
+    private static Vector2 readDataFromPoint_dh(Tile tile, int xGlobal, int yGlobal, ref Dictionary<Location, Tile> tiles)
     {
-      var location = tileCornerFromGlobalCoords(tileSize, xGlobal, yGlobal);
-      var local = tileCoordsFromGlobal(location, tileSize, xGlobal, yGlobal);
-      return tiles[location].dh[local.x, local.y];
+      var corner = tile.Corner;
+      var local = tileCoordsFromGlobal(corner, tile.Size, xGlobal, yGlobal);
+      return tiles[corner].dh[local.x, local.y];
     }
 
-    private static float readDataFromPoint_rho(Vector2Int tileSize, int xGlobal, int yGlobal, ref Dictionary<Location, Tile> tiles)
+    private static float readDataFromPoint_rho(Tile tile, int xGlobal, int yGlobal, ref Dictionary<Location, Tile> tiles)
     {
-      var location = tileCornerFromGlobalCoords(tileSize, xGlobal, yGlobal);
-      var local = tileCoordsFromGlobal(location, tileSize, xGlobal, yGlobal);
-      return tiles[location].rho[local.x, local.y];
+      var corner = tile.Corner;
+      var local = tileCoordsFromGlobal(corner, tile.Size, xGlobal, yGlobal);
+      return tiles[corner].rho[local.x, local.y];
     }
 
-    private static float readDataFromPoint_g(Vector2Int tileSize, int xGlobal, int yGlobal, ref Dictionary<Location, Tile> tiles)
+    private static float readDataFromPoint_g(Tile tile, int xGlobal, int yGlobal, ref Dictionary<Location, Tile> tiles)
     {
-      var location = tileCornerFromGlobalCoords(tileSize, xGlobal, yGlobal);
-      var local = tileCoordsFromGlobal(location, tileSize, xGlobal, yGlobal);
-      return tiles[location].g[local.x, local.y];
+      var corner = tile.Corner;
+      var local = tileCoordsFromGlobal(corner, tile.Size, xGlobal, yGlobal);
+      return tiles[corner].g[local.x, local.y];
     }
 
-    private static Vector2 readDataFromPoint_vAve(Vector2Int tileSize, int xGlobal, int yGlobal, ref Dictionary<Location, Tile> tiles)
+    private static Vector2 readDataFromPoint_vAve(Tile tile, int xGlobal, int yGlobal, ref Dictionary<Location, Tile> tiles)
     {
-      var location = tileCornerFromGlobalCoords(tileSize, xGlobal, yGlobal);
-      var local = tileCoordsFromGlobal(location, tileSize, xGlobal, yGlobal);
-      return tiles[location].vAve[local.x, local.y];
+      var corner = tile.Corner;
+      var local = tileCoordsFromGlobal(corner, tile.Size, xGlobal, yGlobal);
+      return tiles[corner].vAve[local.x, local.y];
     }
   }
 }
