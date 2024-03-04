@@ -5,7 +5,7 @@ using Yohash.Tools;
 
 namespace Yohash.ContinuumCrowds
 {
-  public class UnitPath
+  public class Path
   {
     // IF the unit is on a tile that doesn't exist in this solution,
     //      we need to determine the best way back to the nearest tile
@@ -19,7 +19,7 @@ namespace Yohash.ContinuumCrowds
     /// </summary>
     private LinkedListNode<Destination> _current;
     public Destination CurrentDestination {
-      get { return _current.Value; }
+      get { return _current == null ? null : _current.Value; }
     }
 
     /// <summary>
@@ -28,7 +28,7 @@ namespace Yohash.ContinuumCrowds
     /// </summary>
     /// <param name="portals"></param>
     /// <param name="navSystem"></param>
-    public UnitPath(
+    public Path(
       IEnumerable<Portal> portals,
       Dictionary<Location, Tile> tiles,
       Func<Location, Location> hashTileLocation
