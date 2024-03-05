@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.6] - 2024-03-04
+
+### Added
+
+- Added `IUnit` parameter for unit mass
+- Reference documentation
+
+### Changed
+
+- Changed `IUnit` methods to parameters for cleaner appearance
+- Scaled the density field by a unit's mass
+
+### Fixed
+
+- Modified the density value computation method to ensure stable simulations, and meet requirements posed in the reference
+
 ## [0.2.5] - 2024-03-04
 
 ### Added
@@ -15,7 +31,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Changed `UnitPath` to `Path` to lessen name redundancy
-
 
 ## [0.2.4] - 2024-03-01
 

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Yohash.Tools;
@@ -94,6 +94,7 @@ namespace Yohash.ContinuumCrowds
 
       // grab velocity to scale the footprint
       var velocity = unit.Velocity;
+      var mass = unit.Mass;
       // scan the grid, stamping the footprint onto the tile
       for (int x = 0; x < footprint.GetLength(0); x++) {
         for (int y = 0; y < footprint.GetLength(1); y++) {
@@ -107,10 +108,11 @@ namespace Yohash.ContinuumCrowds
           var yLocal = yIndex - tile.Corner.y;
           // ensure we aren't indexing out of range
           if (!tile.ContainsLocalPoint(xLocal, yLocal)) { continue; }
-          // add rho to the in-place density
-          tile.rho[xLocal, yLocal] += vu;
+          // add rho to the in-place density (footnote*)
+          //tile.rho[xLocal, yLocal] += vu * mass;
+          tile.rho[xLocal, yLocal] = Math.Max(tile.rho[xLocal, yLocal], vu * mass);
           // add velocity to existing data
-          tile.vAve[xLocal, yLocal] += vu * velocity;
+          tile.vAve[xLocal, yLocal] += vu * mass * velocity;
         }
       }
     }
@@ -166,7 +168,9 @@ namespace Yohash.ContinuumCrowds
       }
 
       // otherwise, run the speed field calculation
-      float ff, ft, fv;
+      float ff;
+      float ft;
+      float fv;
 
       // grab density for the region INTO WHICH we look
       float rho = !tile.ContainsLocalPoint(xLocalInto, yLocalInto)
@@ -216,12 +220,12 @@ namespace Yohash.ContinuumCrowds
       return Math.Max(Constants.Values.f_speedMin, dot);
     }
 
-    private static void computeCostField(Tile cct, ref Dictionary<Location, Tile> tiles)
+    private static void computeCostField(Tile tile, ref Dictionary<Location, Tile> tiles)
     {
-      for (int n = 0; n < cct.SizeX; n++) {
-        for (int m = 0; m < cct.SizeY; m++) {
+      for (int n = 0; n < tile.SizeX; n++) {
+        for (int m = 0; m < tile.SizeY; m++) {
           for (int d = 0; d < Constants.Values.ENSW.Length; d++) {
-            cct.C[n, m][d] = computeCostFieldValue(n, m, d, Constants.Values.ENSW[d], cct, ref tiles);
+            tile.C[n, m][d] = computeCostFieldValue(n, m, d, Constants.Values.ENSW[d], tile, ref tiles);
           }
         }
       }
@@ -315,3 +319,25 @@ namespace Yohash.ContinuumCrowds
     }
   }
 }
+///
+/// Footnote regarding the use of a Max function in the computation of the density field, rho
+///
+/// The main text, https://grail.cs.washington.edu/projects/crowd-flows/78-treuille.pdf, uses the following
+/// equation to compute the density field:
+///
+///   (a) tile.rho[xLocal, yLocal] += vu * mass;
+///
+/// The paper states, regarding the density computations:
+///           > ...each person should contribute no less than rho_bar to their
+///           > own grid cell, but no more than rho_bar to any neighboring grid cell.
+///
+/// In the paper, in order to satisfy this requirement, a custom density conversion function is used.
+/// Here, however, we are creating a footprint of the Unit, and performing a bilinear interpolation to
+/// properly spread its influence onto its near-exact position in the grid. As a result, we are not
+/// satisfying the condition as specified. Simulations with this condition in place are highly unstable
+///
+/// It was discovered that the use of a Max function in the density computation, as follows, stabilizes
+/// the simulation:
+///
+///   (b) tile.rho[xLocal, yLocal] = Math.Max(tile.rho[xLocal, yLocal], vu * mass);
+///
