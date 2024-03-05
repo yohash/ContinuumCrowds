@@ -69,27 +69,32 @@ namespace Yohash.ContinuumCrowds
     /// <summary>
     /// a Unique (hashable) id for this unit
     /// </summary>
-    public int Id { get { return _unit.UniqueId(); } }
+    public int Id => _unit.UniqueId;
 
     /// <summary>
     /// The 2D position of a unit
     /// </summary>
-    public Vector2 Position { get { return _unit.Position(); } }
+    public Vector2 Position => _unit.Position;
 
     /// <summary>
     /// The y-axis (xz-plane) rotation in degrees
     /// </summary>
-    public float Rotation { get { return _unit.Rotation(); } }
+    public float Rotation => _unit.Rotation;
 
     /// <summary>
     /// The 2D velocity of a unit, pulled from the cc unit interface
     /// </summary>
-    public Vector2 Velocity { get { return _unit.Velocity(); } }
+    public Vector2 Velocity => _unit.Velocity;
 
     /// <summary>
     /// The 2D size of a unit, assumed facing in the +y direction
     /// </summary>
-    public Vector2 Size { get { return _unit.Size(); } }
+    public Vector2 Size => _unit.Size;
+
+    /// <summary>
+    /// The total mass of the unit
+    /// </summary>
+    public float Mass => _unit.Mass;
 
     /// <summary>
     /// The 2D footprint of a unit, with radial dropoff
@@ -148,10 +153,10 @@ namespace Yohash.ContinuumCrowds
       set {
         if (_subscribedSolution == value) { return; }
         if (_subscribedSolution != null) {
-          _subscribedSolution.Unsubscribe(_unit.UniqueId());
+          _subscribedSolution.Unsubscribe(_unit.UniqueId);
         }
         if (value != null) {
-          value.Subscribe(_unit.UniqueId());
+          value.Subscribe(_unit.UniqueId);
         }
         _subscribedSolution = value;
       }
@@ -175,7 +180,7 @@ namespace Yohash.ContinuumCrowds
     public Unit(IUnit ccUnitInterface)
     {
       _unit = ccUnitInterface;
-      _position = ccUnitInterface.Position();
+      _position = ccUnitInterface.Position;
       computeStationaryFootprint();
     }
 
@@ -185,10 +190,10 @@ namespace Yohash.ContinuumCrowds
     ~Unit()
     {
       foreach (var tile in currentTiles) {
-        tile.Unsubscribe(_unit.UniqueId());
+        tile.Unsubscribe(_unit.UniqueId);
       }
       if (_subscribedSolution != null) {
-        _subscribedSolution.Unsubscribe(_unit.UniqueId());
+        _subscribedSolution.Unsubscribe(_unit.UniqueId);
       }
     }
 
@@ -206,13 +211,13 @@ namespace Yohash.ContinuumCrowds
       foreach (var newTile in newTiles) {
         if (!currentTiles.Contains(newTile)) {
           // this is a new tile. Subscribe
-          newTile.Subscribe(_unit.UniqueId());
+          newTile.Subscribe(_unit.UniqueId);
         }
       }
       foreach (var currentTile in currentTiles) {
         if (!newTiles.Contains(currentTile)) {
           // we no longer affect this tile. Unsubscribe
-          currentTile.Unsubscribe(_unit.UniqueId());
+          currentTile.Unsubscribe(_unit.UniqueId);
         }
       }
       // clear list
@@ -224,7 +229,7 @@ namespace Yohash.ContinuumCrowds
     public bool DidUnitMove()
     {
       var oldPosition = _position;
-      _position = _unit.Position();
+      _position = _unit.Position;
       return oldPosition.x != _position.x || oldPosition.y != _position.y;
     }
 
@@ -246,7 +251,7 @@ namespace Yohash.ContinuumCrowds
       //      - get velocity
       //      - rotate unit footprint
       //      - create "predictive" unit footprint
-      if (_unit.Speed() < Constants.Values.v_dynamicFootprintThreshold) {
+      if (_unit.Speed < Constants.Values.v_dynamicFootprintThreshold) {
         computeStationaryFootprint();
       } else {
         computeMobileFootprint(Constants.Values.v_predictiveSeconds);
@@ -267,7 +272,7 @@ namespace Yohash.ContinuumCrowds
     public Vector2 DriverReference {
       get {
         var yOff = new Vector2(0, Size.y / 2f + Constants.Values.u_driverSeatOffset);
-        yOff = yOff.Rotate(-_unit.Rotation() * Mathf.Deg2Rad);
+        yOff = yOff.Rotate(-_unit.Rotation * Mathf.Deg2Rad);
         return Position + yOff;
       }
     }
@@ -278,14 +283,14 @@ namespace Yohash.ContinuumCrowds
       //        while we're modifying them in the editor
       var ft = FootprintRadialFalloff;
       // rotate the base footprint to match unit's rotation
-      _footprint = BaseFootprint.Rotate(-_unit.Rotation());
+      _footprint = BaseFootprint.Rotate(-_unit.Rotation);
       // compute the footprint's half-dimensions
       var xHalf = _footprint.GetLength(0) / 2f;
       var yHalf = _footprint.GetLength(1) / 2f;
       // an offset to counter the (+1, +1) added to create equivalent volumes
       var offset = 0.5F * Vector2.one;
       // translate the anchor so the footprint is centered about our unit
-      _anchor = _unit.Position() - new Vector2(xHalf, yHalf) + offset;
+      _anchor = _unit.Position - new Vector2(xHalf, yHalf) + offset;
       // perform bilinear interpolation of the footprint at our anchor
       _footprint = _footprint.BilinearInterpolation(_anchor);
     }
@@ -293,7 +298,7 @@ namespace Yohash.ContinuumCrowds
     private void computeMobileFootprint(float distanceScalar)
     {
       // fetch unit properties
-      var speed = _unit.Speed();
+      var speed = _unit.Speed;
       //var footprint = _ccUnitInterface.Footprint();
 
       // (1) compute values
@@ -335,7 +340,7 @@ namespace Yohash.ContinuumCrowds
 
     public override int GetHashCode()
     {
-      return _unit.UniqueId();
+      return _unit.UniqueId;
     }
   }
 }
