@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.7] - 2024-03-06
+
+### Changed
+
+- Changed `IUnit.UniqueId` to `IUnit.Id` for brevity
+- Changed `DynamicGlobalFields` flow speed calculation to clamp to 0, as per the reference text
+
 ## [0.2.6] - 2024-03-04
 
 ### Added
@@ -16,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Changed `IUnit` methods to parameters for cleaner appearance
 - Scaled the density field by a unit's mass
+
 
 ### Fixed
 

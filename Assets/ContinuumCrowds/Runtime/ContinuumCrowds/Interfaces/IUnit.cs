@@ -4,7 +4,7 @@ namespace Yohash.ContinuumCrowds
 {
   public interface IUnit
   {
-    int UniqueId { get; }
+    int Id { get; }
     Vector2 Velocity { get; }
     float Speed { get; }
     Vector2 Position { get; }

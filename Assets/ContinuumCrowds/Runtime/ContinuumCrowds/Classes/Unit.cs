@@ -69,7 +69,7 @@ namespace Yohash.ContinuumCrowds
     /// <summary>
     /// a Unique (hashable) id for this unit
     /// </summary>
-    public int Id => _unit.UniqueId;
+    public int Id => _unit.Id;
 
     /// <summary>
     /// The 2D position of a unit
@@ -153,10 +153,10 @@ namespace Yohash.ContinuumCrowds
       set {
         if (_subscribedSolution == value) { return; }
         if (_subscribedSolution != null) {
-          _subscribedSolution.Unsubscribe(_unit.UniqueId);
+          _subscribedSolution.Unsubscribe(_unit.Id);
         }
         if (value != null) {
-          value.Subscribe(_unit.UniqueId);
+          value.Subscribe(_unit.Id);
         }
         _subscribedSolution = value;
       }
@@ -190,10 +190,10 @@ namespace Yohash.ContinuumCrowds
     ~Unit()
     {
       foreach (var tile in currentTiles) {
-        tile.Unsubscribe(_unit.UniqueId);
+        tile.Unsubscribe(_unit.Id);
       }
       if (_subscribedSolution != null) {
-        _subscribedSolution.Unsubscribe(_unit.UniqueId);
+        _subscribedSolution.Unsubscribe(_unit.Id);
       }
     }
 
@@ -211,13 +211,13 @@ namespace Yohash.ContinuumCrowds
       foreach (var newTile in newTiles) {
         if (!currentTiles.Contains(newTile)) {
           // this is a new tile. Subscribe
-          newTile.Subscribe(_unit.UniqueId);
+          newTile.Subscribe(_unit.Id);
         }
       }
       foreach (var currentTile in currentTiles) {
         if (!newTiles.Contains(currentTile)) {
           // we no longer affect this tile. Unsubscribe
-          currentTile.Unsubscribe(_unit.UniqueId);
+          currentTile.Unsubscribe(_unit.Id);
         }
       }
       // clear list
@@ -340,7 +340,7 @@ namespace Yohash.ContinuumCrowds
 
     public override int GetHashCode()
     {
-      return _unit.UniqueId;
+      return _unit.Id;
     }
   }
 }
