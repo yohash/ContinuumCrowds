@@ -1,6 +1,6 @@
 {
   "name": "com.yohash.continuumcrowds",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "displayName": "Continuum Crowds",
   "description": "Implementation of Continuum Crowds, a real-time crowd model based on continuum dynamics.",
   "unity": "2019.1",

@@ -181,16 +181,20 @@ namespace Yohash.ContinuumCrowds
       // test the density INTO WHICH we move:
       if (rho < Constants.Values.f_rhoMin) {
         // rho < rho_min calc
-        ft = computeTopographicalSpeed(readDataFromPoint_dh(tile, xGlobalInto, yGlobalInto, ref tiles), direction);
+        var dh = readDataFromPoint_dh(tile, xGlobalInto, yGlobalInto, ref tiles);
+        ft = computeTopographicalSpeed(dh, direction);
         ff = ft;
       } else if (rho > Constants.Values.f_rhoMax) {
         // rho > rho_max calc
-        fv = computeFlowSpeed(readDataFromPoint_vAve(tile, xGlobalInto, yGlobalInto, ref tiles), direction);
+        var vAve = readDataFromPoint_vAve(tile, xGlobalInto, yGlobalInto, ref tiles);
+        fv = computeFlowSpeed(vAve, direction);
         ff = fv;
       } else {
         // rho in-between calc
-        fv = computeFlowSpeed(readDataFromPoint_vAve(tile, xGlobalInto, yGlobalInto, ref tiles), direction);
-        ft = computeTopographicalSpeed(readDataFromPoint_dh(tile, xGlobalInto, yGlobalInto, ref tiles), direction);
+        var vAve = readDataFromPoint_vAve(tile, xGlobalInto, yGlobalInto, ref tiles);
+        var dh = readDataFromPoint_dh(tile, xGlobalInto, yGlobalInto, ref tiles);
+        fv = computeFlowSpeed(vAve, direction);
+        ft = computeTopographicalSpeed(dh, direction);
         ff = ft + (fv - ft) * (rho - Constants.Values.f_rhoMin) / (Constants.Values.f_rhoMax - Constants.Values.f_rhoMin);
       }
       return Mathf.Clamp(ff, Constants.Values.f_speedMin, Constants.Values.f_speedMax);
@@ -217,7 +221,10 @@ namespace Yohash.ContinuumCrowds
       // the flow speed is simply the average velocity field of the region
       // INTO WHICH we are looking, dotted with the direction vector
       float dot = vAve.x * direction.x + vAve.y * direction.y;
-      return Math.Max(Constants.Values.f_speedMin, dot);
+      // We ignore negative dot products here. From the text:
+      //      > the flow speed is clamped to be nonnegative, implying that
+      //      > the crowd can slow people down, but never carry them backwards.
+      return Math.Max(0, dot);
     }
 
     private static void computeCostField(Tile tile, ref Dictionary<Location, Tile> tiles)
