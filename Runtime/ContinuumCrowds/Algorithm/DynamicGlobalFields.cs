@@ -39,7 +39,7 @@ namespace Yohash.ContinuumCrowds
         int updateId,
         Tile tile,
         ref Dictionary<Location, Tile> tiles,
-        ref Dictionary<int, IUnit> units
+        ref Dictionary<int, IContinuumUnit> units
     )
     {
       // first, clear the tile
@@ -72,7 +72,7 @@ namespace Yohash.ContinuumCrowds
     // ******************************************************************************************
     // 							FIELD SOLVING FUNCTIONS
     // ******************************************************************************************
-    private static void computeUnitFields(IUnit unit, Tile tile)
+    private static void computeUnitFields(IContinuumUnit unit, Tile tile)
     {
       // TODO: Only apply unit fields to continuous segments, ie.
       //      if a portion of this field is blocked by impassable
