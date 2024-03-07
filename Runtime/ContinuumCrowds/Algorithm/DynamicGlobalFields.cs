@@ -39,7 +39,7 @@ namespace Yohash.ContinuumCrowds
         int updateId,
         Tile tile,
         ref Dictionary<Location, Tile> tiles,
-        ref Dictionary<int, Unit> units
+        ref Dictionary<int, IUnit> units
     )
     {
       // first, clear the tile
@@ -72,7 +72,7 @@ namespace Yohash.ContinuumCrowds
     // ******************************************************************************************
     // 							FIELD SOLVING FUNCTIONS
     // ******************************************************************************************
-    private static void computeUnitFields(Unit unit, Tile tile)
+    private static void computeUnitFields(IUnit unit, Tile tile)
     {
       // TODO: Only apply unit fields to continuous segments, ie.
       //      if a portion of this field is blocked by impassable
@@ -89,8 +89,8 @@ namespace Yohash.ContinuumCrowds
       var footprint = unit.Footprint;
 
       // offsets - floor produces smoothest interpolated position stamps
-      var xOffset = Mathf.FloorToInt(unit.Anchor.x);
-      var yOffset = Mathf.FloorToInt(unit.Anchor.y);
+      var xOffset = Mathf.FloorToInt(unit.Corner.x);
+      var yOffset = Mathf.FloorToInt(unit.Corner.y);
 
       // grab velocity to scale the footprint
       var velocity = unit.Velocity;
