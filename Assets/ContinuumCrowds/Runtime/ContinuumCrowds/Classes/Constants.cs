@@ -17,11 +17,6 @@ namespace Yohash.ContinuumCrowds
       }
     }
 
-    // this deterimnes how much "lead" in front of a unit they will look to sample
-    // their velocity when polling the eikonal solutions
-    [Header("The distance in front of the unit from which velocity is sampled")]
-    public float u_driverSeatOffset = 1f;
-
     // how far a unit's footprint will radially extend beyond its given size
     [Header("How far a unit's footprint will extend beyond its size")]
     public float u_unitRadialFalloff = 0f;
