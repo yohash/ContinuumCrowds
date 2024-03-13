@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Yohash.Tools
+namespace Yohash.ContinuumCrowds
 {
   public static class LocationExtensions
   {

@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [0.3.3] - 2024-03-13
+
+### Removed
+
+- Removed two more unused scripts `Portal.cs` and `IPathable.cs`.
+
+### Changed
+
+- Converted several files over to share the `Yohash.ContinuumCrowds` common namespace.
+
 ## [0.3.2] - 2024-03-11
 
 ### Removed

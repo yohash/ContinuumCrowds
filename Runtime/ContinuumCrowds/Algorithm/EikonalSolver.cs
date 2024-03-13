@@ -2,7 +2,6 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using Yohash.PriorityQueue;
-using Yohash.Tools;
 
 namespace Yohash.ContinuumCrowds
 {
