@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.4] - 2024-03-13
+
+### Added
+
+- Created a new Tile Interface `IContinuumTile` to replace direct Tile dependency, and allow implementations some flexibility
+- Added a defensive maneuver in `DynamicGlobalFields.UpdateTile()` to ensure unit dictionary contains the key before accessing
+
+### Removed
+
+- Removed the `updateId` as an input to `DynamicGlobalFields.UpdateTile()`, and allow the caller to track update IDs on their tiles locally
+- Removed `Tile.MarkComplete()` and `Tile.ShouldUpdate()` as derived dependencies, unecessary for completeness of this core algorithm
+
+### Changed
+
+- Changed all `TileExtension` over to use the new `IContinuumTile`
 
 ## [0.3.3] - 2024-03-13
 

@@ -27,7 +27,7 @@ namespace Yohash.ContinuumCrowds
     private int _hash;
     private bool hashed = false;
 
-    public Destination(Tile tile, List<Location> goal)
+    public Destination(IContinuumTile tile, List<Location> goal)
       => (_location, _goal) = (tile.Corner, goal);
 
     public bool GoalContainsPoint(Vector2 point)
