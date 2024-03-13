@@ -71,7 +71,7 @@ namespace Yohash.ContinuumCrowds
     public EikonalSolver() { }
 
     public void Solve(
-        Tile tile,
+        IContinuumTile tile,
         List<Location> goal,
         Action<EikonalSolver> onComplete
     )
