@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Yohash.Tools
+namespace Yohash.ContinuumCrowds
 {
   [Serializable]
   public partial struct Location : IEquatable<Location>
